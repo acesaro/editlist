@@ -1,0 +1,84 @@
+{% raw %}
+<!doctype html>
+<html lang="en" ng-app="todo">
+<head>
+  <title>List Editor</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static/css/jquery-ui.min.css">
+  <link rel="stylesheet" href="static/css/common.css">
+
+  <script src="static/js/libs/jquery.min.js"></script>
+  <script src="static/js/libs/jquery-ui.min.js"></script>
+  <script src="static/js/libs/jquery.ui.touch-punch.min.js"></script>
+  <script src="static/js/libs/bootstrap.min.js"></script>
+  <script src="static/js/libs/angular.min.js"></script>
+  <script src="static/js/libs/angular-local-storage.min.js"></script>
+  <script src="static/js/libs/sortable.js"></script>
+  <script src="static/js/app.js"></script>
+  <script src="static/js/directives/angular.editInPlace.js"></script>
+  <script src="static/js/directives/angular.ngEnter.js"></script>
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body ng-controller="ListCtrl" ng-init="init()">
+  <!-- The Common Navigation Navbar-->
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">List Editor</a>
+        </div>
+      </div>
+    </div>
+
+  <div class="container" ng-controller="ListCtrl" id="playground">
+    <div class="row">
+      <div class="col-xs-3">
+        <div class="list-group">
+          <a href="#" ng-repeat="todos in model" class="list-group-item" ng-class="{'active' : currentShow === $index}" ng-click="changeList($index)" >
+          <span class="badge">{{todos.list.length}}</span>
+          {{todos.name}}
+          </a>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="row" id="todoAdd">
+          <div class="form-group">
+            <input class="todoField" id="newListField" type="text" ng-model="newList" placeholder="Add New List" ng-enter>
+            <button id="todoSubmit" class="btn btn-default" ng-click="addList()">Add</button>
+          </div>
+        </div>
+        <div class="row">
+          <ul class="list-unstyled" ng-repeat="todos in model track by $index" ui-sortable="todoSortable" ng-model="todos.list" ng-show="$index === currentShow">
+            <li class="todoTask" ng-repeat="todo in todos.list | filter:showFn | filter :todoSearch ">
+              <input class="todoCheckbox" ng-model="todo.isDone" type="checkbox">
+              <label class="todoCheckboxlabel" ></label>
+              <edit-in-place value="todo.taskName"></edit-in-place>
+              <button type="button" class="close pull-right" aria-hidden="true" ng-click="deleteList(todo)">&times;</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="debug">
+        <p class="text-info">{{ model | json}}</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+{% endraw %}
