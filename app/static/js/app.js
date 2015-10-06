@@ -1,29 +1,18 @@
 "use strict";
 
-var App = angular.module("todo", ["ui.sortable", "LocalStorageModule"]);
+var App = angular.module("list", ["ui.sortable"]);
 
-App.controller("ListCtrl", function ($scope, localStorageService) {
+App.controller("ListCtrl", function ($scope, $http) {
 
   $scope.init = function () {
+    $http.get('/editlist/api/v1/lists/_all').
+      success(function(data, status, headers, config) {
+        $scope.model = data;
+      }).
+      error(function(data, status, headers, config) {
+        console.log('Error fetching lists data');
+      });
 
-    if (!localStorageService.get("todoList")) {
-      $scope.model = [
-        {
-          name: "Primary", list: [
-            { taskName: "Create an Angular-js ListList", isDone: false },
-            { taskName: "Understanding Angular-js Directives", isDone: true }
-          ]
-        },
-        {
-          name: "Secondary", list: [
-            { taskName: "Build an open-source website builder", isDone: false },
-            { taskName: "BUild an Email Builder", isDone: false }
-          ]
-        }
-      ];
-    }else{
-      $scope.model = localStorageService.get("todoList");
-    }
     $scope.show = "All";
     $scope.currentShow = 0;
   };
@@ -40,9 +29,9 @@ App.controller("ListCtrl", function ($scope, localStorageService) {
     $scope.model[$scope.currentShow].list.splice(index, 1);
   };
 
-  $scope.todoSortable = {
-    containment: "parent",//Dont let the user drag outside the parent
-    cursor: "move",//Change the cursor icon on drag
+  $scope.listSortable = {
+    containment: "parent", //Dont let the user drag outside the parent
+    cursor: "move", //Change the cursor icon on drag
     tolerance: "pointer"//Read http://api.jqueryui.com/sortable/#option-tolerance
   };
 
@@ -50,23 +39,11 @@ App.controller("ListCtrl", function ($scope, localStorageService) {
     $scope.currentShow = i;
   };
 
-  /* Filter Function for All | Incomplete | Complete */
-  $scope.showFn = function (todo) {
-    if ($scope.show === "All") {
-      return true;
-    }else if(todo.isDone && $scope.show === "Complete"){
-      return true;
-    }else if(!todo.isDone && $scope.show === "Incomplete"){
-      return true;
-    }else{
-      return false;
-    }
-  };
-
-  $scope.$watch("model",function (newVal,oldVal) {
+  $scope.$watch("model", function (newVal, oldVal) {
     if (newVal !== null && angular.isDefined(newVal) && newVal!==oldVal) {
-      localStorageService.add("todoList",angular.toJson(newVal));
+      //localStorageService.add("listList", angular.toJson(newVal));
+      // TODO: implement POST to api to add a list
     }
-  },true);
+  }, true);
 
 });

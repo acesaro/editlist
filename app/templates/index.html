@@ -1,6 +1,6 @@
 {% raw %}
 <!doctype html>
-<html lang="en" ng-app="todo">
+<html lang="en" ng-app="list">
 <head>
   <title>List Editor</title>
   <meta charset="UTF-8" />
@@ -47,26 +47,24 @@
     <div class="row">
       <div class="col-xs-3">
         <div class="list-group">
-          <a href="#" ng-repeat="todos in model" class="list-group-item" ng-class="{'active' : currentShow === $index}" ng-click="changeList($index)" >
-          <span class="badge">{{todos.list.length}}</span>
-          {{todos.name}}
+          <a href="#" ng-repeat="lists in model" class="list-group-item" ng-class="{'active' : currentShow === $index}" ng-click="changeList($index)" >
+          <span class="badge">{{lists.list.length}}</span>
+          {{lists.name}}
           </a>
         </div>
       </div>
       <div class="col-xs-6">
-        <div class="row" id="todoAdd">
+        <div class="row" id="listAdd">
           <div class="form-group">
-            <input class="todoField" id="newListField" type="text" ng-model="newList" placeholder="Add New List" ng-enter>
-            <button id="todoSubmit" class="btn btn-default" ng-click="addList()">Add</button>
+            <input class="listField" id="newListField" type="text" ng-model="newList" placeholder="Add New List" ng-enter>
+            <button id="listSubmit" class="btn btn-default" ng-click="addList()">Add</button>
           </div>
         </div>
         <div class="row">
-          <ul class="list-unstyled" ng-repeat="todos in model track by $index" ui-sortable="todoSortable" ng-model="todos.list" ng-show="$index === currentShow">
-            <li class="todoTask" ng-repeat="todo in todos.list | filter:showFn | filter :todoSearch ">
-              <input class="todoCheckbox" ng-model="todo.isDone" type="checkbox">
-              <label class="todoCheckboxlabel" ></label>
-              <edit-in-place value="todo.taskName"></edit-in-place>
-              <button type="button" class="close pull-right" aria-hidden="true" ng-click="deleteList(todo)">&times;</button>
+          <ul class="list-unstyled" ng-repeat="lists in model track by $index" ui-sortable="listSortable" ng-model="lists.entries" ng-show="$index === currentShow">
+            <li class="listTask" ng-repeat="entry in lists.entries">
+              <edit-in-place value="entry"></edit-in-place>
+              <button type="button" class="close pull-right" aria-hidden="true" ng-click="deleteList(list)">&times;</button>
             </li>
           </ul>
         </div>
