@@ -19,7 +19,7 @@ def get_lists():
             with open('%s/%s' % (lists_dir, file)) as f:
                 content = f.readlines()
             for entry in content:
-                list['entries'].append(entry)
+                list['entries'].append(entry.replace('\n', ''))
             lists.append(list)
 
         return json.dumps(lists)

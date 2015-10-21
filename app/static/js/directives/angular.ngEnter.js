@@ -7,7 +7,7 @@ App.directive("ngEnter",function  () {
 			if (e.keyCode === 13) {
 				/*Also update the Angular Cycle*/
 				scope.$apply(function  () {
-					scope.addTodo();//Call addTodo defined inside controller
+					scope.addToList();//Call addTodo defined inside controller
 				});
 			}
 		});

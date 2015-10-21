@@ -17,21 +17,27 @@ App.controller("ListCtrl", function ($scope, $http) {
     $scope.currentShow = 0;
   };
 
-  $scope.addList = function () {
-    /*Should prepend to array*/
-    $scope.model[$scope.currentShow].list.splice(0, 0, {taskName: $scope.newList, isDone: false });
-    /*Reset the Field*/
-    $scope.newList = "";
+  $scope.addToList = function () {
+    // Prepend to the array
+    $scope.model[$scope.currentShow]['entries'].splice(0, 0, $scope.newItem);
+    // Clear the Field
+    $scope.newItem = "";
   };
 
   $scope.saveList = function () {
-    $http.post('/editlist/api/v1/lists/' + $scope.model[$scope.currentShow].name ).
+    $http({
+        method: 'POST',
+        url: '/editlist/api/v1/lists/' + $scope.model[$scope.currentShow].name,
+        data: $.param({data: angular.toJson($scope.model[$scope.currentShow]['entries'])}),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      }).
       success(function(data, status, headers, config) {
         $scope.model = data;
       }).
       error(function(data, status, headers, config) {
         console.log('Error fetching lists data');
       });
+    $scope.init();
   };
 
   $scope.deleteList = function (item) {
@@ -40,9 +46,9 @@ App.controller("ListCtrl", function ($scope, $http) {
   };
 
   $scope.listSortable = {
-    containment: "parent", //Dont let the user drag outside the parent
-    cursor: "move", //Change the cursor icon on drag
-    tolerance: "pointer"//Read http://api.jqueryui.com/sortable/#option-tolerance
+    containment: "parent",
+    cursor: "move",
+    tolerance: "pointer"
   };
 
   $scope.changeList = function (i) {
