@@ -28,18 +28,34 @@ def get_lists():
 
 @app.route('/api/v1/lists/<list>', methods=['POST'])
 def save_list(list):
+    lines = None
     if request.method == 'POST':
-        try:
-            file = open(lists_dir)
-        except:
-            return "Invalid file specified.  Please create file on server as %s/%s/%s before attempting to save list entries to it." % (os.getcwd(), lists_dir, list)
-        try:
-            lines = json.loads(request.form['data'])
-            for line in lines:
-                print line
-            return json.dumps(lines)
-        except:
-            return "Invalid JSON submitted"
+        file = open_file('%s/%s/%s' % (os.getcwd(), lists_dir, list))
+        lines = load_json(request.form['data'])
+        return write_file(file, lines)
     else:
         abort(405)
+
+def open_file(path):
+    try:
+        file = open(path, 'w')
+        return file
+    except:
+        return 'Invalid file specified.  Please create file on server as %s/%s/%s before attempting to save list entries to it.' % (os.getcwd(), lists_dir, list)
+
+def load_json(json_string):
+    try:
+        lines = json.loads(json_string)
+        return lines
+    except:
+        return 'Invalid JSON submitted'
+
+def write_file(file, lines):
+    try:
+        for line in lines:
+            file.write("%s\n" % line)
+        file.close()
+        return 'List written successfully'
+    except Exception, e:
+        return 'Could not write lines to file: %s' % e
 
