@@ -59,7 +59,6 @@ App.controller("ListCtrl", function ($scope, $http) {
   $scope.$watch("model", function (newVal, oldVal) {
     if (newVal !== null && angular.isDefined(newVal) && newVal !== oldVal) {
       $scope.saveList();
-      true;
     }
   },true);
 
