@@ -32,17 +32,16 @@ App.controller("ListCtrl", function ($scope, $http) {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       }).
       success(function(data, status, headers, config) {
-        $scope.model = data;
+        $scope.apiResponse = data;
       }).
       error(function(data, status, headers, config) {
         console.log('Error fetching lists data');
       });
-    $scope.init();
   };
 
-  $scope.deleteList = function (item) {
-    var index = $scope.model[$scope.currentShow].list.indexOf(item);
-    $scope.model[$scope.currentShow].list.splice(index, 1);
+  $scope.deleteEntry = function (item) {
+    var index = $scope.model[$scope.currentShow]['entries'].indexOf(item);
+    $scope.model[$scope.currentShow]['entries'].splice(index, 1);
   };
 
   $scope.listSortable = {
@@ -56,9 +55,10 @@ App.controller("ListCtrl", function ($scope, $http) {
   };
 
   $scope.$watch("model", function (newVal, oldVal) {
-    if (newVal !== null && angular.isDefined(newVal) && newVal!==oldVal) {
-      // TODO: implement POST to api to add a list
+    if (newVal !== null && angular.isDefined(newVal) && newVal !== oldVal) {
+      $scope.saveList();
+      true;
     }
-  }, true);
+  },true);
 
 });

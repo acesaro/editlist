@@ -53,7 +53,7 @@ def load_json(json_string):
 def write_file(file, lines):
     try:
         for line in lines:
-            file.write("%s\n" % line)
+            file.write('%s\n' % line)
         file.close()
         return 'List written successfully'
     except Exception, e:
