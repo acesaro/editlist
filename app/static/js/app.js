@@ -18,10 +18,12 @@ App.controller("ListCtrl", function ($scope, $http) {
   };
 
   $scope.addToList = function () {
-    // Prepend to the array
-    $scope.model[$scope.currentShow]['entries'].splice(0, 0, $scope.newItem);
-    // Clear the Field
-    $scope.newItem = "";
+    if (typeof $scope.newItem !== 'undefined') {
+      // Prepend to the array
+      $scope.model[$scope.currentShow]['entries'].splice(0, 0, $scope.newItem);
+      // Clear the Field
+      $scope.newItem = "";
+    }
   };
 
   $scope.saveList = function () {
